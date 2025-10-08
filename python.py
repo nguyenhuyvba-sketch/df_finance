@@ -77,9 +77,8 @@ def get_ai_analysis(data_for_ai, api_key):
         return response.text
 
     except APIError as e:
+        # Lỗi API 400 INVALID_ARGUMENT (API key not valid) sẽ được bắt ở đây
         return f"Lỗi gọi Gemini API: Vui lòng kiểm tra Khóa API hoặc giới hạn sử dụng. Chi tiết lỗi: {e}"
-    except KeyError:
-        return "Lỗi: Không tìm thấy Khóa API 'GEMINI_API_KEY'. Vui lòng kiểm tra cấu hình Secrets trên Streamlit Cloud."
     except Exception as e:
         return f"Đã xảy ra lỗi không xác định: {e}"
 
@@ -135,7 +134,7 @@ def chat_section(df_processed, api_key):
         with st.chat_message("assistant"):
             with st.spinner("AI đang phân tích và trả lời..."):
                 try:
-                    # Cấu hình để truyền system_instruction (ĐÃ SỬA LỖI)
+                    # Cấu hình để truyền system_instruction 
                     chat_config = types.GenerateContentConfig(
                         system_instruction=system_instruction
                     )
