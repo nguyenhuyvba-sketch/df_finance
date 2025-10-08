@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from google import genai
+from google.genai import types # Thêm import này để sử dụng GenerateContentConfig
 from google.genai.errors import APIError
 
 # --- Cấu hình Trang Streamlit ---
@@ -134,10 +135,15 @@ def chat_section(df_processed, api_key):
         with st.chat_message("assistant"):
             with st.spinner("AI đang phân tích và trả lời..."):
                 try:
+                    # Cấu hình để truyền system_instruction (ĐÃ SỬA LỖI)
+                    chat_config = types.GenerateContentConfig(
+                        system_instruction=system_instruction
+                    )
+                    
                     response = client.models.generate_content(
                         model=model_name,
                         contents=gemini_contents,
-                        system_instruction=system_instruction
+                        config=chat_config # Tham số đúng để truyền system_instruction
                     )
                     ai_response = response.text
                 except APIError as e:
